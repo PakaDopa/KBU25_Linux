@@ -10,7 +10,7 @@ apt-get install -y make build-essential curl git zlib1g-dev \
 
 # pyenv 설치
 export PYENV_ROOT="/root/.pyenv"
-git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+curl https://pyenv.run | bash
 
 # pyenv 환경 설정을 /etc/profile.d에 등록 (모든 셸에서 적용되도록)
 cat <<EOF > /etc/profile.d/pyenv.sh
