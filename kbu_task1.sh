@@ -1,33 +1,32 @@
 #!/bin/bash
-set -e
 
-# 필수 패키지 설치
-apt-get update
-apt-get install -y make build-essential curl git zlib1g-dev \
-  libssl-dev libbz2-dev libreadline-dev libsqlite3-dev wget \
-  llvm libncursesw5-dev xz-utils tk-dev libxml2-dev \
-  libxmlsec1-dev libffi-dev liblzma-dev ca-certificates
+# pyenv 설치 (이미 설치되어 있다면 건너뜁니다.)
+if ! command -v pyenv &> /dev/null
+then
+  curl https://pyenv.run | bash
+  echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+  echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+  echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
+  source ~/.bashrc
+fi
 
-# pyenv 설치
-export PYENV_ROOT="/root/.pyenv"
-git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+# 필요한 패키지 설치 (apt update는 Dockerfile에서 이미 수행하므로 생략)
+sudo apt-get install -y --no-install-recommends \
+  build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+  wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
-# pyenv 환경 변수 및 초기화 - .bashrc에 추가
-# echo 'export PYENV_ROOT="/root/.pyenv"' >> /root/.bashrc
-# echo 'export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"' >> /root/.bashrc
-# echo 'eval "$(pyenv init --path)"' >> /root/.bashrc
-# echo 'eval "$(pyenv init -)"' >> /root/.bashrc
+# Python 3.12.0 설치 (이미 설치되어 있다면 건너뜁니다.)
+if ! pyenv versions | grep "3.12.0"
+then
+  pyenv install 3.12.0
+fi
 
-# 현재 셸에서도 반영
-# export PATH="/root/.pyenv/bin:/root/.pyenv/shims:$PATH"
-# eval "$(/root/.pyenv/bin/pyenv init --path)"
-# eval "$(/root/.pyenv/bin/pyenv init -)"
-
-# Python 설치
-pyenv install 3.12.0 -s
+# 전역 파이썬 버전 설정
 pyenv global 3.12.0
 
-# 확인
-pyenv -v
+# pyenv 버전 및 현재 파이썬 버전 출력 (채점 스크립트 확인용)
+echo "pyenv version:"
+pyenv --version
+echo ""
+echo "python version:"
 python --version
-
