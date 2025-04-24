@@ -19,8 +19,8 @@ fi
 eval "$(pyenv init - bash)"
 
 # 필요한 패키지 설치 (apt update는 Dockerfile에서 이미 수행하므로 생략)
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends \
+apt-get update
+apt-get install -y --no-install-recommends \
   build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
   wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
@@ -35,9 +35,3 @@ fi
 # 전역 파이썬 버전 설정
 pyenv global 3.12.0
 
-# pyenv 버전 및 현재 파이썬 버전 출력 (채점 스크립트 확인용)
-echo "pyenv version:"
-pyenv --version
-echo ""
-echo "python version:"
-python --version
