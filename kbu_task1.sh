@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # 중간에 실패하면 즉시 종료
+set -e  # 에러 발생 시 즉시 종료
 
 # 필수 패키지 설치
 apt-get update
@@ -12,17 +12,17 @@ apt-get install -y make build-essential curl git zlib1g-dev \
 export PYENV_ROOT="/root/.pyenv"
 git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
 
-# 환경 변수 설정
+# pyenv 경로 및 초기화
 export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+eval "$($PYENV_ROOT/bin/pyenv init --path)"
+eval "$($PYENV_ROOT/bin/pyenv init -)"
 
-# Python 설치
+# Python 3.12.0 설치
 pyenv install 3.12.0 -s
 
-# 전역 설정
+# 전역 Python 설정
 pyenv global 3.12.0
 
-# 확인
+# 설치 확인
 pyenv -v
 python --version
