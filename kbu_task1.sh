@@ -1,29 +1,25 @@
 #!/bin/bash
 set -e
 
-# 필수 패키지 설치
-apt-get update
-apt-get install -y make build-essential curl git zlib1g-dev \
-  libssl-dev libbz2-dev libreadline-dev libsqlite3-dev wget \
-  llvm libncursesw5-dev xz-utils tk-dev libxml2-dev \
-  libxmlsec1-dev libffi-dev liblzma-dev ca-certificates
+# 필요한 의존성 설치 (리눅스 예시)
+sudo apt-get update
+sudo apt-get install make gcc ncurses-dev -y
 
-# pyenv 설치
-export PYENV_ROOT="/root/.pyenv"
-curl https://pyenv.run | bash
+# pyenv 설치 스크립트 다운로드
+wget -O install.sh https://github.com/pyenv/pyenv-installer/raw/master/install.sh
 
-# pyenv 환경 설정을 /etc/profile.d에 등록 (모든 셸에서 적용되도록)
-cat <<EOF > /etc/profile.d/pyenv.sh
-export PYENV_ROOT="/root/.pyenv"
-export PATH="\$PYENV_ROOT/bin:\$PYENV_ROOT/shims:\$PATH"
-eval "\$(pyenv init --path)"
-eval "\$(pyenv init -)"
-EOF
+# pyenv 설치 스크립트 실행
+bash install.sh
 
-# 현재 셸에서도 즉시 적용
-export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+# pyenv 경로 추가 (예시)
+echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PYENV_VERSION="2.3.19"' >> ~/.bashrc
+echo 'export PYENV_ROOT_OLD="$HOME/.pyenv"' >> ~/.bashrc
+echo 'eval "$(pyenv init bash)"' >> ~/.bashrc
+
+# 설정 적용
+source ~/.bashrc
 
 # Python 설치
 pyenv install 3.12.0 -s
